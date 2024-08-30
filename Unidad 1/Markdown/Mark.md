@@ -21,7 +21,7 @@
 |                |                 |     |   Fundamentos ING Software      |
 
 # Lenguajes de prohgramacion que domino
-- C# ![](https://niixer.com/wp-content/uploads/2020/11/csharp.jpg)
+- C # ![](https://niixer.com/wp-content/uploads/2020/11/csharp.jpg)
 # Trabajo 
 - Papeleria
 
