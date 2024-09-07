@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica Float</title>
+    <style>
+        body {
+            background-color: aqua;
+            font-family: fantasy;
+        }
+
+        .contenedor {
+            overflow: auto; 
+        }
+
+        .caja {
+            background-color: blue;
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            padding: 10px;
+            color: white;
+        }
+
+        #caja1 {
+            float: left; 
+            text-align: center;
+        }
+
+        #info1 {
+            float: right; 
+            width: 50%; 
+        }
+
+        #caja2 {
+            float: right; 
+            text-align: center;
+        }
+
+        #info2 {
+            float: left;
+            width: 50%; 
+        }
+
+        #caja3 {
+            clear: both; 
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        #titulo {
+            text-align: center;
+            font-size: 24px;
+            color: darkblue;
+        }
+
+        p {
+            font-family: fantasy;
+            color: darkblue;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+      
+        <h1 id="titulo">¿COMO HACER FLOTAR CAJAS?</h1> 
+        
+    
+        <div class="caja" id="caja1">Caja 1</div>
+        <p id="info1">Para hacer que las cajas floten en HTML, necesitas utilizar CSS con la propiedad float. 
+            Esto se usa comúnmente para alinear elementos como cajas o divs a la izquierda o derecha dentro de su contenedor.</p>
+        
+       
+        <div class="caja" id="caja2">Caja 2</div>
+        <p id="info2">La propiedad float: left; hace que la caja se alinee a la izquierda.
+            La propiedad float: right; hace que la caja se alinee a la derecha.
+            La clase contenedor con overflow: auto; asegura que el contenedor 
+            se ajuste correctamente al contenido flotante, evitando problemas de colapso de contenedor.</p>
+
+      
+        <div class="caja" id="caja3">Caja 3</div>
+    </div>
+
+</body>
+</html>
