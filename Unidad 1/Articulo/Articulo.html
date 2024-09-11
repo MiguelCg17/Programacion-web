@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <style>
-      body{background-color:#1b1616;}  
+      body{background-image: url(fondo.png);}  
 *
 {
     box-sizing: border-box ;
@@ -25,24 +25,35 @@ h1 {
     color: white; 
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color:darkblue;
-    margin-top: 20px;
 }
 p{color: antiquewhite;}
 img
 {
 display: box;
 margin: 0;
-width: 400px;
-height: 200px;
+width: 600px;
+height: 300px;
 margin-bottom: 20px;
 }
-img{margin-top: 20px;}
+h1.SegundoTit{margin-top: 30px;}
+img{margin-bottom: 20px;margin-top: 30px;}
+img.Daytona1img{margin-bottom: 20px; animation: mover 3s infinite alternate;}
+@keyframes mover {
+    from {
+        transform: translateX(0); /* Empieza en la posición original */
+    }
+    to {
+        transform: translateX(300px); /* Se mueve 300px a la derecha */
+    }
+}
+img.Day2{width: 555px;
+    height: 400px; }
     </style>
 </head>
 <body>
     <div id="contenedor">
         <h1>La nueva Dodge Durango y un nuevo crossover de Chrysler llegarían en 2026</h1>
-        <img src="Durango.png" alt="Durango">
+        <img src="Durango.png" alt="Durango"> 
         <p>La tercera generación de la Dodge Durango llevaba fabricándose desde 2010 y cuando todo parecía que en 2024 nos despediríamos de esta icónica SUV, la marca decidió extender su producción hasta 2025, pero lo que es un hecho, es que este modelo está viviendo sus últimos meses.
 
             Sin embargo, Dodge se está transformando en una marca que apuesta fuerte por la electrificación por lo que no había más espacio para esta añeja SUV y su, aunque veterano, también magnífico V8 Hemi.
@@ -54,9 +65,19 @@ img{margin-top: 20px;}
                 No obstante, todo indica que la nueva Durango no vendrá sola y es que, según un informe, la factoría canadiense también se está preparando para albergar un nuevo crossover de Chrysler de dos filas de asientos, el cual entraría en producción a principios de 2026. Empero, en este caso se basará en plataforma STLA Medium.
                 
                 Con ello, Chrysler aún mantiene la llama de la esperanza encendida, en espera de un nuevo modelo que llegue a reforzar su alineación, ahora compuesta únicamente por la Pacifica.</p>
-                <h1>Dodge Charger Daytona SRT Concept: El muscle americano para la era eléctrica</h1>
+                <h1 class="SegundoTit">Dodge Charger Daytona SRT Concept: El muscle americano para la era eléctrica</h1>
                 <p>Parece que los días de los orgullosos muscle cars estadounidenses con potentes motores V8 y escapes rugientes pronto serán cosa del pasado. Los modelos Charger y Challenger de Dodge se despedirán en 2023 como conocimos ayer, y los modelos eléctricos también están invadiendo marcas clásicas como el Chevy Camaro y el Ford Mustang con el famoso Mach-E.
 
                     Aún así, Dodge no quiere que llores por el muscle car todavía. El nuevo Dodge Charger Daytona SRT Concept es un coupé eléctrico de alto rendimiento diseñado para llevar adelante el legado impetuoso de Dodge y convertirse en "el futuro de los muscle electrificados".</p>
+                    <img class="Daytona1img" src="daytonatransparente.png" alt="daytonatransparente">
+                    <h1>Tan potente como un Redeye</h1>
+                    <p>El corazón de este Daytona SRT es su arquitectura eléctrica de 800 voltios bautizada como Banshee. Esto es el doble del voltaje que la arquitectura de 400 voltios utilizada por muchos otros vehículos eléctricos y permite una carga más rápida, una mejor refrigeración para los motores eléctricos y un cableado más ligero. El Porsche Taycan, el Audi e-tron GT, el Hyundai Ioniq 5 y el Kia EV6 también utilizan arquitecturas de 800 voltios.
+
+                        Aunque Dodge aún no ha compartido ningún detalle de rendimiento o tren motriz para el concepto, afirma que el Daytona SRT será más rápido que sus primos con motor Hellcat V8 "en todas las medidas clave de rendimiento". Asumimos que esto significa tanto aceleración como velocidad máxima. Como referencia, el Charger SRT Hellcat Redeye con el paquete Jailbreak tiene unos monstruosos 807 caballos de fuerza, y el Redeye que probamos en su día hacía el 0 a 100 km/h en 3,5 segundos. Un botón de push-tu-pass llamado PowerShot proporcionará un impulso adicional de forma temporal.
+                        
+                        A diferencia de su predecesor de tracción trasera con motor de combustión, este Daytona SRT tiene tracción en las cuatro ruedas, demostrado al más puro estilo Dodge con un desgaste en las cuatro ruedas de un video teaser publicado en julio del año pasado. También obtendrá frenos de seis pistones, y seguramente también se incorporará el frenado regenerativo.</p>
+                        <img class="Day2" src="Daytona2.png" alt="Daytona2">
+                        <p>Para dar a los conductores la sensación de "puntos de cambio distintivos", Dodge ha dotado al Daytona SRT de una transmisión de varias velocidades. No hay muchos detalles disponibles más allá de eso, pero una mirada a la imagen conceptual del interior nos dice que es probable que sea automático. El Daytona SRT tampoco es el primer automóvil eléctrico que se aparta de los sistemas tradicionales de transmisión directa; Tanto el Taycan como el e-tron GT utilizan una caja de cambios automática de dos velocidades. Aunque no podemos asegurarlo, parece probable que el Daytona SRT use una transmisión de dos velocidades para mejorar la aceleración y la eficiencia.</p>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/5c01LeI7fs0?si=_CRCH-zu4oJ_69Nw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </body>
 </html>
