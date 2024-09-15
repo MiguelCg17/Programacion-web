@@ -1,4 +1,4 @@
-|| Unidad | Descripción                           |
+| Unidad | Descripción                           |
 |--------|---------------------------------------|
 | px     | Píxeles. Un puntito en la pantalla.   |
 | cm     | Centímetros. Tamaño físico real.      |
@@ -6,6 +6,7 @@
 | in     | Pulgadas. 2.54 cm.                    |
 | pt     | Puntos. 1/72 de una pulgada.          |
 | pc     | Picas. 12 puntos.                     |
+
 
 
 | Unidad | Descripción                                        |
