@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Modificado</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 15% 45% 30% 10%;
+            grid-template-rows: 15% 45% 20% 20%;
+            grid-template-areas: 
+                "Encabezado Encabezado Encabezado Encabezado"
+                "Barra      Caja5      Caja6      ."
+                "Barra      Caja7      Caja8      ."
+                "PiePag     PiePag     PiePag     PiePag";
+            width: 100vw;
+            height: 100vh;
+            background-color: #3b0c0c;
+        }
+
+        #one {
+            grid-area: Encabezado;
+            background-color: red;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .CajaFloat {
+            width: 18%;
+            height: 100%;
+            font-family: 'Impact', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: red;
+            color: white;
+            font-size: 5em;
+            border: 1px solid black;
+        }
+
+        #two {
+            grid-area: Barra;
+            background-color: #3b0c0c;
+            border: 1px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #three {
+            grid-area: PiePag;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid black;
+        }
+
+        .CajaFlex {
+            width: 30%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border: 1px solid red;
+        }
+
+        .CajaFlex img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        #four, #five, #six, #seven {
+            padding: 10px;
+            display: flex;
+            font-size: 20px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border: 1px solid red;
+            background-color: #3b0c0c;
+        }
+
+        #four { grid-area: Caja5; }
+        #five { grid-area: Caja6; }
+        #six { grid-area: Caja7; }
+        #seven { grid-area: Caja8; }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div id="one">
+            <div class="CajaFloat">D</div>
+            <div class="CajaFloat">O</div>
+            <div class="CajaFloat">D</div>
+            <div class="CajaFloat">G</div>
+            <div class="CajaFloat">E</div>
+        </div>
+
+        <div id="two">
+            <img src="menu.jpg" alt="menu">
+        </div>
+
+        <div id="three">
+            <div class="CajaFlex">
+                <img src="charger.jpg" alt="charger">
+            </div>
+            <div class="CajaFlex">
+                <img src="Dodge-Challenger.jpg" alt="Challenger">
+            </div>
+            <div class="CajaFlex">
+                <img src="dart.jpg" alt="dart">
+            </div>
+            <div class="CajaFlex">
+                <img src="Ram.jpg" alt="Ram">
+            </div>
+            <div class="CajaFlex">
+                <img src="Dode-Journey.jpg" alt="Dode-Journey">
+            </div>
+            <div class="CajaFlex">
+                <img src="Durango.jpg" alt="Durango">
+            </div> 
+        </div>
+
+        <div id="four">
+             En 1914 los hermanos John Francis y Horace Dodge presentan al público el primer Dodge® con una producción de 249 unidades.
+        </div>
+        <div id="five">
+            1969: Charger Daytona se presenta con una nariz de cono y un gran alerón trasero. Este vehículo fue destinado a NASCAR; solo se produjeron 500.
+        </div>
+        <div id="six">
+            1970: Debuta el "Dodge® Challenger" como modelo especial "T/A" para competir en el circuito "Trans Am".
+        </div>
+        <div id="seven">
+            1994: Neon llega a México en su versión sedán y se convierte en un auto deseado por los jóvenes.
+        </div>
+    </div>
+</body>
+</html>
