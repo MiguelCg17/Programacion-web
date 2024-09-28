@@ -1,0 +1,69 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background-image: url(fondo.png);
+    font-family: fantasy;
+  }
+  .orillas {
+    position: relative;
+    top: 50px;
+    left: 50px;
+    background-color: blue;
+    width: 1150px;
+    height: 150px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  #contenedor {
+    width: 60%;
+    margin: 0 auto;
+    line-height: 1.5em;
+  }
+  #contenedor img {
+    display: block;
+    margin: 30px auto;
+    width: 600px;
+    height: 300px;
+    border-radius: 10px;
+  }
+  #contenedor img.Daytona1img {
+    margin-bottom: 20px;
+    animation: mover 3s infinite alternate;
+    border-radius: 10px;
+  }
+  #contenedor img.Day2 {
+    width: 555px;
+    height: 400px;
+  }
+  #contenedor h1 {
+    margin-bottom: 10px;
+    color: white;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    background-color: darkblue;
+    padding: 10px;
+  }
+  #contenedor h1.SegundoTit {
+    margin-top: 30px;
+  }
+  #contenedor p {
+    color: antiquewhite;
+    margin-bottom: 20px;
+  }
+  @keyframes mover {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(300px);
+    }
+  }
+  
