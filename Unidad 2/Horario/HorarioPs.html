@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *
+        {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        table
+        {
+width: 100%;
+        }
+        table,td{
+            border: 2px solid blue;
+         border-collapse:collapse ;
+        }
+
+       tbody > tr:nth-child(odd)
+        {
+            background-color: aqua;
+        }
+
+        tbody > tr:hover{
+            background-color: black;
+            color: wheat;
+        }
+        tbody > tr dt:active
+        {
+            background-color: blue;
+            color: white;
+        }
+        @media screen and (max-width:500px)
+        {
+            table, tbody, thead, tr, td{display: block;}
+            tbody tr > td :first-child
+            {
+                background-color: blue;
+                color: antiquewhite;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>Materia</td>
+                <td>Lunes</td>
+                <td>Martes</td>
+                <td>Miercoles</td>
+                <td>Jueves</td>
+                <td>Viernes</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Programacion Web</td>
+                <td>7-8</td>
+                <td>7-8</td>
+                <td>7-8</td>
+                <td>7-8</td>
+                <td>7-8</td>
+            </tr>
+            <tr>
+                <td>Ecuaciones Diferenciales</td>
+                <td>2-3</td>
+                <td>2-3</td>
+                <td>2-3</td>
+                <td>2-3</td>
+                <td>2-3</td>
+            </tr>
+            <tr>
+                <td>Sistemas Operativos </td>
+                <td>12-2</td>
+                <td>10-11</td>
+                <td></td>
+                <td>10-11</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Fundamentos de Base de Datos</td>
+                <td>11-12</td>
+                <td>11-12</td>
+                <td>11-12</td>
+                <td>11-12</td>
+                <td>11-12</td>
+            </tr>
+            <tr>
+                <td>Fundamentos de Ingenideria de software</td>
+                <td></td>
+                <td>8-10</td>
+                <td></td>
+                <td>8-10</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Ingles</td>
+                <td></td>
+                <td>4-9</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
