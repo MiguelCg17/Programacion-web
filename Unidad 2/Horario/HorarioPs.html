@@ -13,35 +13,58 @@
         }
         table
         {
-width: 100%;
+            width: 100%;
+            border-collapse: collapse;
         }
-        table,td{
+        table, td, th {
             border: 2px solid blue;
-         border-collapse:collapse ;
         }
 
-       tbody > tr:nth-child(odd)
-        {
-            background-color: aqua;
+        tbody > tr:nth-child(odd) {
+            background-color: rgb(30, 255, 0);
         }
 
-        tbody > tr:hover{
+        tbody > tr:hover {
             background-color: black;
             color: wheat;
         }
-        tbody > tr dt:active
-        {
-            background-color: blue;
-            color: white;
+
+        td, th {
+            padding: 8px;
+            text-align: left;
         }
-        @media screen and (max-width:500px)
-        {
-            table, tbody, thead, tr, td{display: block;}
-            tbody tr > td :first-child
-            {
-                background-color: blue;
-                color: antiquewhite;
-                text-align: center;
+        @media screen and (min-width: 501px) {
+            td:first-child {
+                font-weight: bold;
+            }
+            td:last-child {
+                background-color: lightgray;
+            }
+        }
+        @media screen and (max-width: 500px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead {
+                display: none;
+            }
+            tbody > tr {
+                margin-bottom: 10px;
+                border-bottom: 2px solid blue;
+            }
+            td {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border: 1px solid #ccc;
+                position: relative;
+            }
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                text-transform: uppercase;
+                padding-right: 10px;
+                color: blue;
             }
         }
     </style>
@@ -50,62 +73,62 @@ width: 100%;
     <table>
         <thead>
             <tr>
-                <td>Materia</td>
-                <td>Lunes</td>
-                <td>Martes</td>
-                <td>Miercoles</td>
-                <td>Jueves</td>
-                <td>Viernes</td>
+                <th>Materia</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Programacion Web</td>
-                <td>7-8</td>
-                <td>7-8</td>
-                <td>7-8</td>
-                <td>7-8</td>
-                <td>7-8</td>
+                <td data-label="Materia">Programación Web</td>
+                <td data-label="Lunes">7-8</td>
+                <td data-label="Martes">7-8</td>
+                <td data-label="Miércoles">7-8</td>
+                <td data-label="Jueves">7-8</td>
+                <td data-label="Viernes">7-8</td>
             </tr>
             <tr>
-                <td>Ecuaciones Diferenciales</td>
-                <td>2-3</td>
-                <td>2-3</td>
-                <td>2-3</td>
-                <td>2-3</td>
-                <td>2-3</td>
+                <td data-label="Materia">Ecuaciones Diferenciales</td>
+                <td data-label="Lunes">2-3</td>
+                <td data-label="Martes">2-3</td>
+                <td data-label="Miércoles">2-3</td>
+                <td data-label="Jueves">2-3</td>
+                <td data-label="Viernes">2-3</td>
             </tr>
             <tr>
-                <td>Sistemas Operativos </td>
-                <td>12-2</td>
-                <td>10-11</td>
-                <td></td>
-                <td>10-11</td>
-                <td></td>
+                <td data-label="Materia">Sistemas Operativos</td>
+                <td data-label="Lunes">12-2</td>
+                <td data-label="Martes">10-11</td>
+                <td data-label="Miércoles"></td>
+                <td data-label="Jueves">10-11</td>
+                <td data-label="Viernes"></td>
             </tr>
             <tr>
-                <td>Fundamentos de Base de Datos</td>
-                <td>11-12</td>
-                <td>11-12</td>
-                <td>11-12</td>
-                <td>11-12</td>
-                <td>11-12</td>
+                <td data-label="Materia">Fundamentos de Base de Datos</td>
+                <td data-label="Lunes">11-12</td>
+                <td data-label="Martes">11-12</td>
+                <td data-label="Miércoles">11-12</td>
+                <td data-label="Jueves">11-12</td>
+                <td data-label="Viernes">11-12</td>
             </tr>
             <tr>
-                <td>Fundamentos de Ingenideria de software</td>
-                <td></td>
-                <td>8-10</td>
-                <td></td>
-                <td>8-10</td>
-                <td></td>
+                <td data-label="Materia">Fundamentos de Ingeniería de Software</td>
+                <td data-label="Lunes"></td>
+                <td data-label="Martes">8-10</td>
+                <td data-label="Miércoles"></td>
+                <td data-label="Jueves">8-10</td>
+                <td data-label="Viernes"></td>
             </tr>
             <tr>
-                <td>Ingles</td>
-                <td></td>
-                <td>4-9</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td data-label="Materia">Inglés</td>
+                <td data-label="Lunes"></td>
+                <td data-label="Martes">4-9</td>
+                <td data-label="Miércoles"></td>
+                <td data-label="Jueves"></td>
+                <td data-label="Viernes"></td>
             </tr>
         </tbody>
     </table>
