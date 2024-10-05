@@ -4,22 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
 </head>
 <body>
-    <form action="" method="GET" enctype="application/x-www-form-urlencoded">
+    <form class="pure-form pure-form-stacked" action="" method="GET" enctype="application/x-www-form-urlencoded">
 
         <label for="nom">NOMBRE</label>
-<input type="text" name="nombre" id="nom"> 
+        <input type="text" name="nombre" id="nom" class="pure-input-1"> 
 
-<label for="nom">ApellidoP</label>
-<input type="text" name="apellidop" id="apep"> 
+        <label for="apep">ApellidoP</label>
+        <input type="text" name="apellidop" id="apep" class="pure-input-1"> 
 
-<label for="nom">ApellidoM</label>
-<input type="text" name="apellidom" id="apem"> 
+        <label for="apem">ApellidoM</label>
+        <input type="text" name="apellidom" id="apem" class="pure-input-1"> 
 
-   <input class="pure-button pure-button-primary" type="submit" value="Enviar">
-   <input class="pure-button pure-button-primary" type="button" value="Js">
-   <input class="pure-button pure-button-primary" type="reset" value="Limpiar">
-</form>
+        <fieldset>
+            <legend>Género</legend>
+            <label for="masculino" class="pure-radio">
+                <input type="radio" id="masculino" name="genero" value="masculino"> Masculino
+            </label>
+            <label for="femenino" class="pure-radio">
+                <input type="radio" id="femenino" name="genero" value="femenino"> Femenino
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Intereses</legend>
+            <label for="musica" class="pure-checkbox">
+                <input type="checkbox" id="musica" name="intereses" value="musica"> Música
+            </label>
+            <label for="deportes" class="pure-checkbox">
+                <input type="checkbox" id="deportes" name="intereses" value="deportes"> Deportes
+            </label>
+        </fieldset>
+
+        <label for="pais">País</label>
+        <select id="pais" name="pais" class="pure-input-1">
+            <option value="mexico">México</option>
+            <option value="usa">Estados Unidos</option>
+            <option value="espana">España</option>
+        </select>
+
+
+        <label for="comentarios">Comentarios</label>
+        <textarea id="comentarios" name="comentarios" class="pure-input-1" rows="5"></textarea>
+
+        <input class="pure-button pure-button-primary" type="submit" value="Enviar">
+        <input class="pure-button pure-button-primary" type="button" value="Js">
+        <input class="pure-button pure-button-primary" type="reset" value="Limpiar">
+
+    </form>
 </body>
 </html>
