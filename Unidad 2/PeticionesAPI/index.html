@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peticiones a la API de Marvel</title>
+    <link rel="stylesheet" href="estilos.css"> <!-- Asegúrate de que la ruta sea correcta -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script> <!-- Incluir CryptoJS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Incluir Axios -->
+    <script src="app.js" defer></script> <!-- Asegúrate de que la ruta sea correcta -->
+</head>
+<body>
+    <div class="container">
+        <div class="button-container">
+            <button id="fetchButton">Obtener Personajes (Fetch)</button>
+            <button id="asyncAwaitButton">Obtener Cómics (Async/Await)</button>
+            <button id="xmlHttpRequestButton">Obtener Series (XMLHttpRequest)</button>
+            <button id="axiosButton">Obtener Eventos (Axios)</button>
+        </div>
+        <div id="output" class="output-container"></div>
+    </div>
+</body>
+</html>
