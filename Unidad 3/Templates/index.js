@@ -16,7 +16,7 @@ app.get('/administrativos',(req,res)=>{
   // res.send('Servidores contestando a peticiones GET')
    res.render('admin');
   })
-
+ 
 app.get('/maestros',(req,res)=>{
       console.log(req.body)
        res.send('Servidores contestando a peticiones GET')
