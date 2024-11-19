@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Administrador</title>
+    <style>
+        /* Estilos (idénticos a los originales) */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('AdminN.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .container h1 {
+            text-align: center;
+            font-size: 2.2em;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        .container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #f9f9f9;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #4caf50;
+            background: #fff;
+        }
+        textarea {
+            min-height: 100px;
+            resize: none;
+        }
+        button {
+            padding: 12px;
+            background: #4caf50;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background: #43a047;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .container h1 {
+                font-size: 1.8em;
+            }
+            button {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel del Administrador</h1>
+        <form id="form-animal" action="/animales" method="POST">
+            <!-- Nombre del Animal -->
+            <div class="form-group">
+                <label for="nombre">Nombre del Animal:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ejemplo: León" required>
+            </div>
+
+            <!-- Especie -->
+            <div class="form-group">
+                <label for="especie">Especie:</label>
+                <input type="text" id="especie" name="especie" placeholder="Ejemplo: Felino" required>
+            </div>
+
+            <!-- Edad -->
+            <div class="form-group inline">
+                <label for="edad">Edad (años):</label>
+                <input type="number" id="edad" name="edad" placeholder="Ejemplo: 5" required>
+            </div>
+
+            <!-- Hábitat -->
+            <div class="form-group">
+                <label for="habitat">Hábitat:</label>
+                <select id="habitat" name="habitat" required>
+                    <option value="" disabled selected>Seleccione el hábitat</option>
+                    <option value="Bosque">Bosque</option>
+                    <option value="Sabana">Sabana</option>
+                    <option value="Selva">Selva</option>
+                    <option value="Desierto">Desierto</option>
+                    <option value="Marino">Marino</option>
+                    <option value="Ríos y lagos">Ríos y lagos</option>
+                    <option value="Montañas">Montañas</option>
+                    <option value="Ártico">Ártico</option>
+                </select>
+            </div>
+
+            <!-- Dieta -->
+            <div class="form-group">
+                <label for="dieta">Dieta:</label>
+                <input type="text" id="dieta" name="dieta" placeholder="Ejemplo: Carnívoro" required>
+            </div>
+
+            <!-- Estado de Conservación -->
+            <div class="form-group">
+                <label for="estado">Estado de Conservación:</label>
+                <select id="estado" name="estado" required>
+                    <option value="" disabled selected>Seleccione el estado</option>
+                    <option value="Extinto">Extinto</option>
+                    <option value="Extinto en estado silvestre">Extinto en estado silvestre</option>
+                    <option value="En peligro crítico">En peligro crítico</option>
+                    <option value="En peligro">En peligro</option>
+                    <option value="Vulnerable">Vulnerable</option>
+                    <option value="Casi amenazado">Casi amenazado</option>
+                    <option value="Preocupación menor">Preocupación menor</option>
+                </select>
+            </div>
+
+            <!-- País -->
+            <div class="form-group">
+                <label for="pais">País de Origen:</label>
+                <input type="text" id="pais" name="pais" placeholder="Ejemplo: Kenia" required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" placeholder="Escriba una descripción del animal..." required></textarea>
+            </div>
+
+            <!-- Botón -->
+            <button type="submit">Registrar Animal</button>
+        </form>
+        <p>Complete los campos para registrar un animal en la base de datos.</p>
+    </div>
+
+    <script>
+        // Captura el evento de envío
+        document.getElementById('form-animal').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evita el envío tradicional
+            const form = e.target;
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert('Animal agregado exitosamente.');
+                    form.reset(); // Limpia el formulario
+                } else {
+                    const errorText = await response.text();
+                    alert('Error: ' + errorText);
+                }
+            } catch (err) {
+                alert('Error al enviar los datos: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

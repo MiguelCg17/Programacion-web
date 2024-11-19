@@ -37,7 +37,7 @@ if (!fs.existsSync(pdfFolder)) {
 
 // Ruta para procesar el formulario
 app.post('/formulario', upload.fields([{ name: 'archivo' }, { name: 'imagen' }]), (req, res) => {
-    const { nombre, apellido, email, telefono } = req.body;
+    const { nombre, apellido } = req.body;
     const imagen = req.files?.imagen?.[0]?.path; // Ruta de la imagen cargada
 
     // Crear un nuevo documento PDF
@@ -50,9 +50,7 @@ app.post('/formulario', upload.fields([{ name: 'archivo' }, { name: 'imagen' }])
     doc.fontSize(16).text('Datos del Formulario', { align: 'center' });
     doc.text(`\nNombre: ${nombre}`);
     doc.text(`Apellido: ${apellido}`);
-    doc.text(`Correo Electrónico: ${email}`);
-    doc.text(`Teléfono: ${telefono}`);
-
+   
     // Agregar la imagen al PDF (si existe)
     if (imagen) {
         try {
@@ -85,4 +83,3 @@ app.post('/formulario', upload.fields([{ name: 'archivo' }, { name: 'imagen' }])
 app.listen(8082, () => {
     console.log('Servidor Express escuchando en el puerto 8082');
 });
-

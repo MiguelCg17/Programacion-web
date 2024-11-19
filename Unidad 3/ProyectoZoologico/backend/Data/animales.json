@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "hamster",
+    "especie": "roedor",
+    "edad": "1",
+    "habitat": "Montañas",
+    "dieta": "semillas",
+    "estado": "Preocupación menor",
+    "pais": "estados unidos",
+    "descripcion": "hasmter"
+  },
+  {
+    "nombre": "leon",
+    "especie": "roedor",
+    "edad": "1",
+    "habitat": "Bosque",
+    "dieta": "semillas",
+    "estado": "Preocupación menor",
+    "pais": "estados unidos",
+    "descripcion": "jhgcug"
+  }
+]
