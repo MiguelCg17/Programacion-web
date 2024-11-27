@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con Generación de PDF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Formulario de Usuario</h2>
+
+      <!-- Formulario -->
+      <form id="formulario">
+        <!-- Campo para ID del usuario -->
+        <div class="mb-3">
+          <label for="id" class="form-label">ID del Usuario</label>
+          <input type="number" class="form-control" id="id" name="id" placeholder="Ingrese ID" required>
+        </div>
+
+        <!-- Campo para el nombre -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" readonly>
+        </div>
+
+        <!-- Campo para el apellido -->
+        <div class="mb-3">
+          <label for="apellido" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" readonly>
+        </div>
+
+        <!-- Botones -->
+        <button type="button" class="btn btn-primary" id="btnConsulta">Consultar Usuario</button>
+        <button type="button" class="btn btn-success" id="btnGenerarPDF">Generar PDF</button>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById('btnConsulta').addEventListener('click', async () => {
+          const id = document.getElementById('id').value;
+
+          if (!id) {
+              alert('Por favor, ingresa un ID de usuario.');
+              return;
+          }
+
+          const url = `http://localhost:8082/Usuario?idUsuario=${id}`;
+
+          try {
+              const response = await fetch(url);
+
+              if (!response.ok) {
+                  const error = await response.json();
+                  alert(error.error || 'Error al realizar la consulta.');
+                  return;
+              }
+
+              const usuario = await response.json();
+
+              // Mostrar los datos en los campos
+              document.getElementById('nombre').value = usuario.Nombre; // Asegúrate de que coincide con los nombres de los campos en tu tabla
+              document.getElementById('apellido').value = usuario.Apellido;
+
+              alert('Datos cargados correctamente.');
+          } catch (error) {
+              console.error('Error en la consulta:', error);
+              alert('Error al comunicarte con el servidor.');
+          }
+      });
+
+      document.getElementById('btnGenerarPDF').addEventListener('click', () => {
+          const id = document.getElementById('id').value;
+
+          if (!id) {
+              alert('Por favor, ingresa un ID de usuario.');
+              return;
+          }
+
+          const url = `http://localhost:8082/GenerarPDF?idUsuario=${id}`;
+          window.open(url, '_blank');
+      });
+    </script>
+  </body>
+</html>

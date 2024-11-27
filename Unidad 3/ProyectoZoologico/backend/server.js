@@ -1,21 +1,36 @@
 const express = require('express');
 const path = require('path');
+const mysql = require('mysql2');
+const pdf = require('pdfkit'); 
 const fs = require('fs');
 const app = express();
 
-// Middleware para manejar datos JSON y datos de formularios
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Middleware para servir archivos estáticos
+// Conexión a la base de datos MySQL
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'zoologico',
+});
+
+db.connect(err => {
+    if (err) {
+        console.error('Error al conectar con la base de datos:', err.message);
+        process.exit(1);
+    }
+    console.log('Se conecto Correctamente a la base de datos.');
+});
+
 app.use(express.static(path.join(__dirname, '..', 'Frontend')));
 
-// Ruta para servir el formulario de inicio de sesión (GET /login)
+// Ruta para servir el formulario de inicio de sesión
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'login.html'));
 });
 
-// Ruta para procesar el inicio de sesión (POST /login)
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -28,101 +43,102 @@ app.post('/login', (req, res) => {
     }
 });
 
-// Ruta para la página de administrador
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'admin.html'));
 });
 
-// Ruta para la página de usuario normal
 app.get('/usuario', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'usuario.html'));
 });
 
-// Ruta para obtener todos los animales (GET /animales)
 app.get('/animales', (req, res) => {
-    const filePath = path.join(__dirname, 'Data', 'animales.json');
-    fs.readFile(filePath, 'utf-8', (err, data) => {
+    const query = 'SELECT * FROM animal';
+    db.query(query, (err, results) => {
         if (err) {
-            console.error('Error al leer el archivo:', err);
-            return res.status(500).send('Error al leer los datos.');
+            console.error('Error al obtener los datos:', err.message);
+            return res.status(500).send('Error al obtener los datos.');
         }
-        res.json(JSON.parse(data || '[]'));
+        res.json(results);
     });
 });
 
-// Ruta para agregar un nuevo animal (POST /animales)
 app.post('/animales', (req, res) => {
-    const nuevoAnimal = req.body;
-    const filePath = path.join(__dirname, 'Data', 'animales.json');
+    const { Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion } = req.body;
 
-    fs.readFile(filePath, 'utf-8', (err, data) => {
+    const query = `INSERT INTO animal (Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    db.query(query, [Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion], (err, result) => {
         if (err) {
-            console.error('Error al leer el archivo:', err);
-            return res.status(500).send('Error al leer los datos.');
+            console.error('Error al insertar los datos:', err.message);
+            return res.status(500).send('Error al insertar los datos.');
         }
-
-        const animales = JSON.parse(data || '[]');
-        animales.push(nuevoAnimal);
-
-        fs.writeFile(filePath, JSON.stringify(animales, null, 2), (err) => {
-            if (err) {
-                console.error('Error al escribir el archivo:', err);
-                return res.status(500).send('Error al guardar los datos.');
-            }
-
-            res.status(200).send('Animal agregado correctamente.');
-        });
+        res.status(200).send('Animal agregado correctamente.');
     });
 });
 
-// Ruta para eliminar un animal por nombre (DELETE /animales/:nombre)
 app.delete('/animales/:nombre', (req, res) => {
     const nombreAnimal = req.params.nombre;
-    const filePath = path.join(__dirname, 'Data', 'animales.json');
-
-    fs.readFile(filePath, 'utf-8', (err, data) => {
+    const query = 'DELETE FROM animal WHERE Nombre = ?';
+    db.query(query, [nombreAnimal], (err, result) => {
         if (err) {
-            console.error('Error al leer el archivo:', err);
-            return res.status(500).send('Error al leer los datos.');
+            console.error('Error al eliminar el animal:', err.message);
+            return res.status(500).send('Error al eliminar el animal.');
         }
-
-        let animales = JSON.parse(data || '[]');
-        animales = animales.filter(animal => animal.nombre.toLowerCase() !== nombreAnimal.toLowerCase());
-
-        fs.writeFile(filePath, JSON.stringify(animales, null, 2), (err) => {
-            if (err) {
-                console.error('Error al escribir el archivo:', err);
-                return res.status(500).send('Error al guardar los datos.');
-            }
-
-            res.status(200).send(`Animal ${nombreAnimal} eliminado correctamente.`);
-        });
+        res.status(200).send(`Animal ${nombreAnimal} eliminado correctamente.`);
     });
 });
 
-// Ruta para obtener los detalles de un animal por su nombre (GET /animales/:nombre)
 app.get('/animales/:nombre', (req, res) => {
-    const nombreAnimal = req.params.nombre.toLowerCase();
-    const filePath = path.join(__dirname, 'Data', 'animales.json');
-
-    fs.readFile(filePath, 'utf-8', (err, data) => {
+    const nombreAnimal = req.params.nombre;
+    const query = 'SELECT * FROM animal WHERE Nombre = ?';
+    db.query(query, [nombreAnimal], (err, results) => {
         if (err) {
-            console.error('Error al leer el archivo:', err);
-            return res.status(500).send('Error al leer los datos.');
+            console.error('Error al obtener el animal:', err.message);
+            return res.status(500).send('Error al obtener el animal.');
         }
 
-        const animales = JSON.parse(data || '[]');
-        const animal = animales.find(a => a.nombre.toLowerCase() === nombreAnimal);
-
-        if (!animal) {
-            return res.status(404).send(`No se encontró un animal con el nombre "${req.params.nombre}".`);
+        if (results.length === 0) {
+            return res.status(404).send(`No se encontró un animal con el nombre "${nombreAnimal}".`);
         }
 
-        res.json(animal);
+        res.json(results[0]);
     });
 });
 
-// Inicia el servidor en el puerto 3000
+//  ruta para generar PDF
+app.get('/generar-pdf/:nombre', (req, res) => {
+    const nombreAnimal = req.params.nombre;
+    const query = 'SELECT * FROM animal WHERE Nombre = ?';
+    db.query(query, [nombreAnimal], (err, results) => {
+        if (err) {
+            console.error('Error al obtener el animal para PDF:', err.message);
+            return res.status(500).send('Error al obtener el animal para PDF.');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send(`No se encontró un animal con el nombre "${nombreAnimal}".`);
+        }
+
+        const animal = results[0];
+        const doc = new pdf();
+        const filePath = path.join(__dirname, '..', 'Frontend', 'animal.pdf');
+
+        doc.pipe(fs.createWriteStream(filePath));
+        doc.pipe(res);
+
+        doc.fontSize(16).text(`Información del Animal: ${animal.Nombre}`, { align: 'center' });
+        doc.moveDown();
+        doc.text(`Especie: ${animal.Especie}`);
+        doc.text(`Edad: ${animal.Edad} años`);
+        doc.text(`Hábitat: ${animal.Habitat}`);
+        doc.text(`Dieta: ${animal.dieta}`);
+        doc.text(`Estado de Conservación: ${animal.Estado_Conservacion}`);
+        doc.text(`País de Origen: ${animal.Pais_Origen}`);
+        doc.text(`Descripción: ${animal.Descripcion}`);
+        doc.end();
+    });
+});
+
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
