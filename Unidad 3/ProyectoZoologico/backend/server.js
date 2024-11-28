@@ -1,12 +1,16 @@
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
-const pdf = require('pdfkit'); 
+const pdf = require('pdfkit');
 const fs = require('fs');
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
 // Conexión a la base de datos MySQL
 const db = mysql.createConnection({
@@ -21,8 +25,9 @@ db.connect(err => {
         console.error('Error al conectar con la base de datos:', err.message);
         process.exit(1);
     }
-    console.log('Se conecto Correctamente a la base de datos.');
+    console.log('Se conectó correctamente a la base de datos.');
 });
+
 
 app.use(express.static(path.join(__dirname, '..', 'Frontend')));
 
@@ -31,26 +36,17 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'login.html'));
 });
 
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    if (username === 'admin' && password === 'admin123') {
-        res.redirect('/admin');
-    } else if (username === 'usuario' && password === 'usuario123') {
-        res.redirect('/usuario');
-    } else {
-        res.status(401).send('Credenciales incorrectas. Intente nuevamente.');
-    }
-});
-
+// Ruta para servir el formulario de administración
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'admin.html'));
 });
 
+// Ruta para servir el formulario de usuario
 app.get('/usuario', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'usuario.html'));
 });
 
+// Obtener todos los animales
 app.get('/animales', (req, res) => {
     const query = 'SELECT * FROM animal';
     db.query(query, (err, results) => {
@@ -62,12 +58,17 @@ app.get('/animales', (req, res) => {
     });
 });
 
+// Agregar un nuevo animal
 app.post('/animales', (req, res) => {
     const { Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion } = req.body;
 
-    const query = `INSERT INTO animal (Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    db.query(query, [Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion], (err, result) => {
+    // Formar la ruta de la imagen del hábitat en función del valor seleccionado
+    const Link = `/images/habitats/${Habitat.toLowerCase()}.jpg`; 
+
+    const query = `INSERT INTO animal (Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion, Link)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    db.query(query, [Nombre, Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion, Link], (err, result) => {
         if (err) {
             console.error('Error al insertar los datos:', err.message);
             return res.status(500).send('Error al insertar los datos.');
@@ -76,6 +77,7 @@ app.post('/animales', (req, res) => {
     });
 });
 
+// Eliminar un animal
 app.delete('/animales/:nombre', (req, res) => {
     const nombreAnimal = req.params.nombre;
     const query = 'DELETE FROM animal WHERE Nombre = ?';
@@ -88,6 +90,7 @@ app.delete('/animales/:nombre', (req, res) => {
     });
 });
 
+// Obtener un animal específico por nombre
 app.get('/animales/:nombre', (req, res) => {
     const nombreAnimal = req.params.nombre;
     const query = 'SELECT * FROM animal WHERE Nombre = ?';
@@ -105,7 +108,7 @@ app.get('/animales/:nombre', (req, res) => {
     });
 });
 
-//  ruta para generar PDF
+// Ruta para generar el PDF con la imagen del hábitat
 app.get('/generar-pdf/:nombre', (req, res) => {
     const nombreAnimal = req.params.nombre;
     const query = 'SELECT * FROM animal WHERE Nombre = ?';
@@ -120,25 +123,77 @@ app.get('/generar-pdf/:nombre', (req, res) => {
         }
 
         const animal = results[0];
-        const doc = new pdf();
-        const filePath = path.join(__dirname, '..', 'Frontend', 'animal.pdf');
 
-        doc.pipe(fs.createWriteStream(filePath));
+        // Obtener la ruta de la imagen del hábitat desde la base de datos
+        const habitatImagePath = path.join(__dirname, '..', 'images', 'habitats', animal.Link.replace('/images/habitats/', ''));
+
+        // Crear el documento PDF
+        const doc = new pdf();
         doc.pipe(res);
 
+        // Agregar título
         doc.fontSize(16).text(`Información del Animal: ${animal.Nombre}`, { align: 'center' });
         doc.moveDown();
-        doc.text(`Especie: ${animal.Especie}`);
+
+        // Agregar la información del animal
+        doc.fontSize(12).text(`Especie: ${animal.Especie}`);
         doc.text(`Edad: ${animal.Edad} años`);
         doc.text(`Hábitat: ${animal.Habitat}`);
         doc.text(`Dieta: ${animal.dieta}`);
         doc.text(`Estado de Conservación: ${animal.Estado_Conservacion}`);
         doc.text(`País de Origen: ${animal.Pais_Origen}`);
         doc.text(`Descripción: ${animal.Descripcion}`);
-        doc.end();
+        doc.moveDown();
+
+        // Verificar si la imagen existe
+        fs.exists(habitatImagePath, (exists) => {
+            if (exists) {
+                console.log('Imagen encontrada, agregándola al PDF.');
+                doc.image(habitatImagePath, { fit: [500, 400], align: 'center' });
+            } else {
+                console.log('Imagen no encontrada, mostrando mensaje.');
+                doc.text('Imagen del hábitat no disponible.', { align: 'center' });
+            }
+
+            // Finalizar documento PDF
+            doc.end();
+        });
     });
 });
 
+
+app.put('/animales/:nombre', (req, res) => {
+    const nombreAnimal = req.params.nombre;
+    const { Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion } = req.body;
+
+    // Verificar que los campos necesarios no estén vacíos
+    if (!Especie || !Edad || !Habitat || !dieta || !Estado_Conservacion || !Pais_Origen || !Descripcion) {
+        return res.status(400).send('Todos los campos son necesarios para actualizar el animal.');
+    }
+
+
+    const Link = `/images/habitats/${Habitat.toLowerCase()}.jpg`;  
+
+    const query = `UPDATE animal 
+                   SET Especie = ?, Edad = ?, Habitat = ?, dieta = ?, Estado_Conservacion = ?, Pais_Origen = ?, Descripcion = ?, Link = ? 
+                   WHERE Nombre = ?`;
+
+    db.query(query, [Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion, Link, nombreAnimal], (err, result) => {
+        if (err) {
+            console.error('Error al actualizar los datos:', err.message);
+            return res.status(500).send('Error al actualizar los datos.');
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send(`No se encontró un animal con el nombre "${nombreAnimal}".`);
+        }
+
+        res.status(200).send('Animal actualizado correctamente.');
+    });
+});
+
+// Iniciar el servidor
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
+

@@ -3,44 +3,48 @@ const cors = require('cors');
 const mysql = require('mysql');
 
 const app = express();
+const PORT = 8081;
+
+
 app.use(cors());
+app.use(express.json());
 
-// Configuración de la conexión a la base de datos
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '', // Cambia esto según tu configuración
-  database: 'formularioweb' // Cambia según el nombre de tu base de datos
-});
 
-// Conexión a la base de datos
-db.connect(err => {
-  if (err) {
-    console.error('Error conectando a la base de datos:', err);
-    return;
-  }
-  console.log('Conexión a la base de datos exitosa');
-});
+const dbConfig = {
+    host: 'localhost',
+    user: 'root',       
+    password: '',        
+    database: 'formularioweb', 
+};
 
-// Ruta para obtener los usuarios
-app.get('/usuarios', (req, res) => {
-  db.query('SELECT id_Usuario, Nombre, Apellido FROM usuario', (err, results) => {
-    if (err) {
-      console.error('Error ejecutando la consulta:', err);
-      res.status(500).send('Error en el servidor');
-      return;
+
+const connection = mysql.createConnection(dbConfig);
+
+
+connection.connect((error) => {
+    if (error) {
+        console.error('Error al conectar con la base de datos:', error);
+        process.exit(1); 
+    } else {
+        console.log('Conexión exitosa con la base de datos.');
     }
-
-    // Imprimir los resultados en la terminal
-    console.log('Resultados de la consulta:', results);
-
-    // Enviar los resultados como respuesta JSON
-    res.json(results);
-  });
 });
 
-// Configuración del puerto
-const PORT = 3000;
+
+app.get('/datos', (req, res) => {
+    const query = 'SELECT * FROM usuario'; 
+
+    connection.query(query, (error, results) => {
+        if (error) {
+            console.error('Error al ejecutar la consulta:', error);
+            res.status(500).json({ error: 'Error al obtener los datos.' });
+        } else {
+            res.json(results); 
+        }
+    });
+});
+
+// Iniciar el servidor.
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

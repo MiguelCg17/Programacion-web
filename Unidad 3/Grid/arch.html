@@ -1,26 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabla de Usuarios</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css"
-    rel="stylesheet"
-  />
-  <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataGrid</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="grid"></div>
+    <div class="container mt-5">
+        <h2>Datos desde la Base de Datos</h2>
+        <table class="table table-bordered" id="dataTable">
+            <thead>
+                <tr>
+                    
+                    <th>id_Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-  <script>
-    new gridjs.Grid({
-      columns: ['ID Usuario', 'Nombre', 'Apellido'],
-      server: {
-        url: 'http://localhost:3000/usuarios',
-        then: data => data.map(user => [user.id_Usuario, user.Nombre, user.Apellido])
-      }
-    }).render(document.getElementById('grid'));
-  </script>
+    <script>
+     
+        async function cargarDatos() {
+            try {
+                const response = await fetch('http://localhost:8081/datos'); 
+                if (response.ok) {
+                    const datos = await response.json(); 
+                    const tableBody = document.querySelector('#dataTable tbody');
+                    tableBody.innerHTML = ''; 
+
+              
+                    datos.forEach(dato => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${dato.id_Usuario}</td>
+                            <td>${dato.Nombre}</td>
+                            <td>${dato.Apellido}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    console.error('Error al cargar los datos:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al cargar los datos:', error.message);
+            }
+        }
+
+      
+        document.addEventListener('DOMContentLoaded', cargarDatos);
+    </script>
 </body>
 </html>

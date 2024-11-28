@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel del Administrador</title>
     <style>
-    body {
+       body {
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -136,10 +136,11 @@
                     <option value="Selva">Selva</option>
                     <option value="Desierto">Desierto</option>
                     <option value="Marino">Marino</option>
-                    <option value="Ríos y lagos">Ríos y lagos</option>
+                    <option value="Rios">Ríos y lagos</option>
                     <option value="Montañas">Montañas</option>
-                    <option value="Ártico">Ártico</option>
+                    <option value="Artico">Ártico</option>
                 </select>
+                <img id="habitat-image" src="" alt="Imagen del hábitat" style="display: none; margin-top: 10px; max-width: 100%; height: auto;">
                 <p class="error-message" id="habitat-error"></p>
             </div>
 
@@ -182,10 +183,15 @@
 
             <!-- Botón -->
             <button type="submit" id="submit-button">Registrar Animal</button>
+            <button type="button" id="update-button" style="display:none;">Guardar Cambios</button>
         </form>
 
         <!-- Botón para eliminar animales -->
         <button id="eliminar-button">Eliminar Animal</button>
+
+        <!-- Botón para buscar y actualizar animales -->
+        <button id="actualizar-button">Buscar Animal para Actualizar</button>
+
         <!-- Botón para ir al formulario de usuario -->
         <button onclick="location.href='/usuario'">Ir al Formulario de Usuario</button>
     </div>
@@ -194,8 +200,7 @@
         // Función de validación para el formulario
         function validateForm() {
             let isValid = true;
-
-            // Limpiar mensajes de error previos
+           
             document.querySelectorAll('.error-message').forEach(msg => msg.textContent = '');
             document.querySelectorAll('input, select, textarea').forEach(input => input.classList.remove('error'));
 
@@ -269,47 +274,122 @@
                 const data = Object.fromEntries(formData.entries());
 
                 try {
-                    const response = await fetch(form.action, {
-                        method: form.method,
-                        headers: { 'Content-Type': 'application/json' },
+                    const response = await fetch('/animales', {
+                        method: 'POST',
                         body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
                     });
-
                     if (response.ok) {
-                        alert('Animal registrado correctamente.');
+                        alert('Animal registrado exitosamente.');
                         form.reset();
                     } else {
-                        alert('Error al registrar el animal.');
+                        alert('Hubo un error al registrar el animal.');
                     }
-                } catch (err) {
-                    console.error('Error:', err);
-                    alert('Hubo un problema al enviar los datos.');
+                } catch (error) {
+                    console.error('Error al registrar animal:', error);
+                    alert('Error al registrar el animal. Intente nuevamente.');
                 }
             }
         });
 
-        // Botón para eliminar animales
+        // Mostrar la imagen del hábitat según la selección
+        document.getElementById('habitat').addEventListener('change', (e) => {
+            const habitat = e.target.value.toLowerCase();
+            const imageUrl = `images/habitats/${habitat}.jpg`;
+
+            const imageElement = document.getElementById('habitat-image');
+            imageElement.src = imageUrl;
+            imageElement.style.display = 'block';
+        });
+
+        // Función para eliminar un animal
         document.getElementById('eliminar-button').addEventListener('click', async () => {
-            const nombre = prompt('Ingrese el nombre del animal a eliminar:');
-            if (nombre) {
+            const nombreAnimal = prompt("Ingrese el nombre del animal que desea eliminar:");
+
+            if (nombreAnimal) {
                 try {
-                    const response = await fetch(`/animales/${nombre}`, { method: 'DELETE' });
+                    const response = await fetch(`/animales/${nombreAnimal}`, { method: 'DELETE' });
                     if (response.ok) {
-                        alert(`Animal "${nombre}" eliminado correctamente.`);
-                        location.reload();
+                        alert('Animal eliminado exitosamente.');
                     } else {
-                        alert('Error al eliminar el animal.');
+                        alert('No se pudo eliminar el animal.');
                     }
-                } catch (err) {
-                    console.error('Error:', err);
+                } catch (error) {
+                    console.error('Error al eliminar el animal:', error);
+                    alert('Error al eliminar el animal. Intente nuevamente.');
                 }
-            } else {
-                alert('Debe ingresar un nombre válido.');
+            }
+        });
+
+        // Función para buscar y actualizar un animal
+        document.getElementById('actualizar-button').addEventListener('click', async () => {
+            const nombreAnimal = prompt("Ingrese el nombre del animal que desea actualizar:");
+
+            if (nombreAnimal) {
+                try {
+                    const response = await fetch(`/animales/${nombreAnimal}`, { method: 'GET' });
+                    if (response.ok) {
+                        const animal = await response.json();
+
+                        // Llenar el formulario con los datos del animal
+                        document.getElementById('nombre').value = animal.Nombre;
+                        document.getElementById('especie').value = animal.Especie;
+                        document.getElementById('edad').value = animal.Edad;
+                        document.getElementById('habitat').value = animal.Habitat;
+                        document.getElementById('dieta').value = animal.Dieta;
+                        document.getElementById('estado').value = animal.Estado_Conservacion;
+                        document.getElementById('pais').value = animal.Pais_Origen;
+                        document.getElementById('descripcion').value = animal.Descripcion;
+
+                        // Mostrar la imagen del hábitat
+                        const imageUrl = `images/habitats/${animal.Habitat.toLowerCase()}.jpg`;
+                        const imageElement = document.getElementById('habitat-image');
+                        imageElement.src = imageUrl;
+                        imageElement.style.display = 'block';
+
+                        // Mostrar el botón de "Guardar Cambios"
+                        document.getElementById('update-button').style.display = 'inline-block';
+                    } else {
+                        alert('No se encontró el animal.');
+                    }
+                } catch (error) {
+                    console.error('Error al buscar animal:', error);
+                    alert('Error al buscar el animal. Intente nuevamente.');
+                }
+            }
+        });
+
+        // Aplicar cambios al animal
+        document.getElementById('update-button').addEventListener('click', async () => {
+            const form = document.getElementById('form-animal');
+            if (validateForm()) {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                const nombreAnimal = data.Nombre;
+
+                try {
+                    const response = await fetch(`/animales/${nombreAnimal}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    if (response.ok) {
+                        alert('Animal actualizado exitosamente.');
+                        form.reset();
+                        document.getElementById('update-button').style.display = 'none'; 
+                    } else {
+                        alert('No se pudo actualizar el animal.');
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar animal:', error);
+                    alert('Error al actualizar el animal. Intente nuevamente.');
+                }
             }
         });
     </script>
 </body>
 </html>
-
-        
-   
