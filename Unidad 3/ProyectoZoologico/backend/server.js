@@ -5,10 +5,8 @@ const pdf = require('pdfkit');
 const fs = require('fs');
 const app = express();
 
-
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+app.use(express.urlencoded({ extended: true }));  // Este middleware es necesario para procesar los datos del formulario
 
 app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
@@ -28,12 +26,29 @@ db.connect(err => {
     console.log('Se conectó correctamente a la base de datos.');
 });
 
-
 app.use(express.static(path.join(__dirname, '..', 'Frontend')));
 
 // Ruta para servir el formulario de inicio de sesión
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Frontend', 'login.html'));
+});
+
+// Ruta para autenticar al usuario
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Definir usuario y contraseña
+    const validUsername = 'admin';
+    const validPassword = 'admin123';
+
+    // Verificar si las credenciales son correctas
+    if (username === validUsername && password === validPassword) {
+        // Redirigir al panel de administración si las credenciales son correctas
+        res.redirect('/admin');
+    } else {
+        // Si las credenciales son incorrectas, redirigir de nuevo al login
+        res.send('<h1>Credenciales incorrectas. Por favor, intenta de nuevo.</h1><a href="/login">Volver a intentar</a>');
+    }
 });
 
 // Ruta para servir el formulario de administración
@@ -161,7 +176,6 @@ app.get('/generar-pdf/:nombre', (req, res) => {
     });
 });
 
-
 app.put('/animales/:nombre', (req, res) => {
     const nombreAnimal = req.params.nombre;
     const { Especie, Edad, Habitat, dieta, Estado_Conservacion, Pais_Origen, Descripcion } = req.body;
@@ -170,7 +184,6 @@ app.put('/animales/:nombre', (req, res) => {
     if (!Especie || !Edad || !Habitat || !dieta || !Estado_Conservacion || !Pais_Origen || !Descripcion) {
         return res.status(400).send('Todos los campos son necesarios para actualizar el animal.');
     }
-
 
     const Link = `/images/habitats/${Habitat.toLowerCase()}.jpg`;  
 
@@ -196,4 +209,3 @@ app.put('/animales/:nombre', (req, res) => {
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
-
